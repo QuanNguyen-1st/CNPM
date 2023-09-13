@@ -1,0 +1,82 @@
+body {
+    margin: 0;
+    line-height: normal;
+}
+
+:root {
+    /* fonts */
+    --font-nunito: Nunito;
+    --font-poppins: Poppins;
+    --font-roboto: Roboto;
+
+    --bs-body-font-family: 'Nunito';
+
+    /* font sizes */
+    --font-size-xl: 20px;
+    --font-size-base: 16px;
+    --font-size-mini: 15px;
+    --font-size-11xl: 30px;
+    --font-size-sm: 14px;
+    --font-size-lg: 18px;
+    --font-size-21xl: 40px;
+    --font-size-xs: 12px;
+    --font-size-2xs: 11px;
+    --font-size-3xs: 10px;
+
+    /* Colors */
+    --white: #fff;
+    --color-limegreen-100: #1fd655;
+    --color-limegreen-200: rgba(31, 214, 85, 0.5);
+    --color-gainsboro-200: #e0e0e0;
+    --color-gainsboro-100: #d9d9d9;
+    --color-darkgray-100: #b3b3b3;
+    --color-darkgray: #adadad;
+    --background-color: #fafafa;
+    --color-gray: #808080;
+    --color-gray-100: #787878;
+    --color-gray-200: #777;
+    --color-gray-300: rgba(0, 0, 0, 0.8);
+    --color-gray-400: rgba(123, 123, 123, 0.25);
+    --color-black: #000;
+    --color-whitesmoke-100: #f2f3f5;
+    --color-whitesmoke-200: #eee;
+    --color-whitesmoke-300: #ededed;
+    --color-whitesmoke-400: rgba(245, 245, 245, 0.8);
+    --color-whitesmoke-500: rgba(235, 235, 235, 0.4);
+    --color-mediumseagreen-100: #0db05d;
+    --color-mediumseagreen-200: rgba(13, 176, 93, 0.5);
+    --color-mintcream: #ebf8f2;
+    --color-lightgray: #d2d2d2;
+    --color-red-100: #ff0303;
+    --color-red-200: #ff0000;
+    --color-red-300: rgba(255, 3, 3, 0.5);
+    --color-goldenrod-100: #ffae42;
+    --color-goldenrod-200: rgba(255, 174, 66, 0.5);
+    --color-darkslategray-100: #2f2d2e;
+    --color-darkslategray-200: rgba(47, 45, 46, 0.5);
+    --color-steelblue-100: #3a9bdc;
+    --color-steelblue-200: rgba(58, 155, 220, 0.5);
+    --color-darkblue: #0300ab;
+
+    /* Gaps */
+    --gap-11xl: 30px;
+    --gap-xs: 12px;
+    --gap-9xs: 4px;
+
+    /* Paddings */
+    --padding-3xs: 10px;
+    --padding-base: 16px;
+    --padding-5xl: 24px;
+    --padding-31xl: 50px;
+
+    /* border radiuses */
+    --br-5xs: 8px;
+    --br-8xs: 5px;
+    --br-4xs: 9px;
+    --br-3xs: 10px;
+    --br-9xs: 4px;
+    --br-mini: 15px;
+    --br-10xs: 3px;
+    --br-6xl: 25px;
+    --br-xl: 20px;
+}  

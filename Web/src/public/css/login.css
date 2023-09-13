@@ -1,0 +1,111 @@
+.login-view-child {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: var(--br-xl);
+    background-color: var(--white);
+    width: 712px;
+    height: 804px;
+}
+.account-child,
+.enter-your-username {
+    position: absolute;
+    top: -5.43%;
+    left: 0;
+}
+.account-child {
+    height: 61.96%;
+    width: 100%;
+    top: 38.04%;
+    right: 0;
+    bottom: 0;
+    border-radius: var(--br-4xs);
+    background-color: var(--white);
+    border: 1px solid var(--color-darkgray);
+    box-sizing: border-box;
+}
+.username {
+    position: absolute;
+    height: 20.65%;
+    width: 66.96%;
+    top: 58.7%;
+    left: 5.54%;
+    font-size: var(--font-size-base);
+    font-weight: 300;
+    color: var(--color-gray);
+    display: inline-block;
+}
+.account {
+    position: absolute;
+    top: 368px;
+    left: 131px;
+    width: 451px;
+    height: 92px;
+}
+
+.password {
+    position: absolute;
+    top: 491px;
+    left: 131px;
+    width: 451px;
+    height: 92px;
+    font-size: 17px;
+}
+.qun-mt-khu {
+    position: absolute;
+    top: 709px;
+    left: 290px;
+    font-weight: 500;
+    color: var(--color-darkblue);
+}
+
+.button {
+    position: absolute;
+    top: 624px;
+    left: 239px;
+    width: 236px;
+    height: 54px;
+    cursor: pointer;
+    color: var(--white);
+    border-radius: var(--br-3xs);
+    background-color: var(--color-darkblue);
+    box-shadow: 0 4px 19px rgba(119, 147, 65, 0.3);
+    font-weight: 500;
+    font-size: var(--font-size-xl);
+}
+.ng-nhp1 {
+    font-weight: 500;
+    position: absolute;
+    top: 188px;
+    left: 11px;
+}
+
+.ng-nhp-parent {
+    position: absolute;
+    top: 62px;
+    left: 254px;
+    width: 220px;
+    height: 243px;
+    font-size: var(--font-size-21xl);
+}
+.login-view {
+    position: absolute;
+    top: 0px;
+    left: 364px;
+    width: 712px;
+    height: 804px;
+}
+.login {
+    position: relative;
+    width: 100%;
+    height: 1024px;
+    overflow: hidden;
+    background-image: url(/img/login@3x.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: top;
+    text-align: left;
+    font-size: var(--font-size-lg);
+    color: var(--color-black);
+    font-family: var(--font-nunito);
+}

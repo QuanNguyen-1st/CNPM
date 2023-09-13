@@ -1,0 +1,122 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3">
+            <h1>MCP</h1>
+        </div>
+        <div class="col-sm">
+            <button type="button" class="btn btn-outline-success float-right" data-toggle="modal" data-target="#create-mcp-modal">
+                <i class="bi bi-check2-circle"></i>
+                Tạo MCP
+            </button>
+        </div>
+    </div>
+    <div style="overflow-y:scroll; height:60vh;">
+        <table class="table" style="margin-top:20px;">
+            <thead class="rounded-top bg-light">
+                <tr>
+                    <th scope="col" style="width: 100px;">#</th>
+                    <th scope="col" style="width: 100px;">Tỷ lệ đầy</th>
+                    <th scope="col">Địa chỉ</th>
+                    <th scope="col" style="width: 100px;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each mcps}}
+                <tr>
+                    <th scope="row">{{math @index "+" 1}}</th>
+                    <th>{{math this.fill_percentage "*" 100}}%</th>
+                    <th>{{this.address}}</th>
+                    <th>
+                        <div class="dropdown">
+                            <a class="btn hidden-arrow" role="button" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="bi bi-three-dots-vertical"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" style="box-shadow: 0px 2px 5px rgba(119, 147, 65, 0.3); border-radius: 20px;">
+                                <a class="dropdown-item text-danger" data-toggle="modal" data-target="#confirm-delete-modal" data-mcp="{{this._id}}">Xóa</a>
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="create-mcp-modal" tabindex="-1" role="dialog" aria-labelledby="create-mcp-modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="update-task-modalLabel">Tạo MCP</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    <div class="form-row">
+                        <div class="form-group col-md">
+                            <input id="mcp-create" name="mcp_address" type="text" class="form-control" placeholder="Địa chỉ MCP">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6"></div>
+                        <div class="form-group col-md-3">
+                            <button id="btn-create-mcp" type="submit" class="btn btn-outline-success btn-block">Xác nhận</button>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <button type="button" class="btn btn-outline-danger btn-block" id="reset-create-form">Reset</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirm-delete-modal" tabindex="-1" role="dialog" aria-labelledby="confirm-delete-modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-center">
+                    <i class="bi bi-person-check-fill" style="font-size:36px;"></i>
+                </div>
+                <h5 class="text-center mt-3">Bạn có chắc chắn muốn xóa?</h5>
+                <div class="form-row mt-3">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-outline-success btn-block" id="btn-delete-mcp">Xác nhận</button>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-danger btn-block" data-dismiss="modal">Hủy bỏ</button>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="delete-mcp-form" method="post"></form>
+
+<script>
+    $(function() {
+        var deleteMCPId;
+        var deleteBtn = document.getElementById('btn-delete-mcp');
+        var deleteForm = document.forms['delete-mcp-form'];
+        $('#confirm-delete-modal').on('show.bs.modal', function(event) {
+            var btn = $(event.relatedTarget);
+            deleteMCPId = btn.data('mcp');
+        });
+        deleteBtn.onclick = function() {
+            deleteForm.action = '/mcp/' + deleteMCPId + '?_method=delete';
+            deleteForm.submit();
+        }
+
+        var input = document.getElementById('mcp-create');
+        var resetBtn = document.getElementById('reset-create-form');
+        resetBtn.onclick = function() {
+            input.value = "";
+        }
+    })
+</script>

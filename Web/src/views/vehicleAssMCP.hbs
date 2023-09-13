@@ -1,0 +1,152 @@
+<div class="container" style="background: #FFFFFF;border: 0.5px solid rgba(123, 123, 123, 0.25);box-shadow: 0px 2px 7px rgba(199, 195, 195, 0.5);border-radius: 10px;padding:30px;">
+    <div class="row" style="">
+        <a href="/vehicle">
+            <i class="bi bi-arrow-left" style="font-size: 36px;"></i>
+        </a>
+        <div class="col-sm-5">
+            <h1>Thông tin phương tiện</h1>
+        </div>
+        <div class="col-sm-6">
+            <button type="button" class="btn btn-outline-success float-right" data-toggle="modal" data-target="#assign-route-modal">
+                <i class="bi bi-check2-circle"></i>
+                Phân công địa điểm
+            </button>
+        </div>
+    </div>
+    <div class="row" style="font-size: 20px;">
+        <i class="bi bi-truck-front"></i>
+        <div class="col-sm-5">
+            <div class="col" id="vehicle-id-container" data-id="{{vehicle_id}}">Mã phương tiện: {{plate}}</div>
+        </div>
+        
+    </div>
+    <div class="row" style="font-size: 20px;">
+        <i class="bi bi-person"></i>
+        <div class="col-sm-5">
+            <div class="col">Tài xế: {{assign_empolyee}}</div>
+        </div>
+    </div>
+    <div class="row" style="font-size: 20px;">
+        <i class="bi bi-bookmark"></i>
+        <div class="col-sm-5">
+            <div class="col">Trạng thái: 
+                {{#if state.notYet}}
+                    <p class="text-center text-success border border-success rounded-pill d-inline" style="width: fit-content; padding: 0px 10px">Chưa bắt đầu</p>
+                {{else if state.collecting}}
+                    <p class="text-center text-warning border border-warning rounded-pill d-inline" style="width: fit-content; padding: 0px 10px">Đang thu gom</p>
+                {{else if state.moving}}
+                    <p class="text-center text-danger border border-danger rounded-pill d-inline" style="width: fit-content; padding: 0px 10px">Vận chuyển</p>
+                {{else if state.done}}
+                    <p class="text-center text-dark border border-dark rounded-pill d-inline" style="width: fit-content; padding: 0px 10px">Hoàn thành</p>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="mt-4" style="overflow-y:scroll; height:45vh;">
+        <table class="table mt-4">
+            <thead class="bg-light">
+                <tr>
+                    <th scope="col" style="width:100px;">#</th>
+                    <th scope="col">Địa điểm</th>
+                    <th scope="col" style="width:100px;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each mcp_list}}
+                    <tr>
+                        <th>{{math @index "+" 1}}</th>
+                        <th scope="row">{{this.address}}</th>
+                        <th>
+                            <div class="dropdown">
+                                <a class="btn hidden-arrow" role="button" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="bi bi-three-dots-vertical"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right" style="box-shadow: 0px 2px 5px rgba(119, 147, 65, 0.3); border-radius: 20px;">
+                                    <a class="dropdown-item text-danger" data-toggle="modal" data-target="#confirm-delete-modal" data-mcpass="{{this._id}}">Xóa</a>
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="assign-route-modal" tabindex="-1" role="dialog" aria-labelledby="assign-route-modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title w-100" id="assign-mcp-modalLabel">Phân công</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-md">
+                            <select name="mcp" id="mcp" class="form-control select-form">
+                                <option value="">Địa điểm MCP</option>
+                                {{#each mcps}}
+                                    <option value="{{this._id}}" >{{this.address}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6"></div>
+                        <div class="form-group col-md-3"></div>
+                        <div class="form-group col-md-3">
+                            <button type="submit" class="btn btn-outline-success btn-block">Xác nhận</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirm-delete-modal" tabindex="-1" role="dialog" aria-labelledby="confirm-delete-modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-center">
+                    <i class="bi bi-person-check-fill" style="font-size:36px;"></i>
+                </div>
+                <h5 class="text-center mt-3">Bạn có chắc chắn muốn xóa?</h5>
+                <div class="form-row mt-3">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-outline-success btn-block" id="btn-delete-route">Xác nhận</button>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-danger btn-block" data-dismiss="modal">Hủy bỏ</button>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="delete-route-form" method="post"></form>
+
+<script>
+    $(function() {
+        var vehicleId = document.getElementById('vehicle-id-container').getAttribute('data-id');
+        var deleteVehicleAssId;
+        var deleteBtn = document.getElementById('btn-delete-route');
+        var deleteForm = document.forms['delete-route-form'];
+        $('#confirm-delete-modal').on('show.bs.modal', function(event) {
+            var btn = $(event.relatedTarget);
+            deleteVehicleAssId = btn.data('mcpass');
+        });
+        deleteBtn.onclick = function() {
+            deleteForm.action = '/vehicle/' + vehicleId + '/assign/' + deleteVehicleAssId + '?_method=delete';
+            deleteForm.submit();
+        }
+    })
+</script>

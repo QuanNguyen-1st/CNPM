@@ -1,0 +1,271 @@
+<style>
+    .filter {
+        box-sizing: border-box;
+        background: #FFFFFF;
+        border: 1px solid #ADADAD;
+        border-radius: 9px;
+        height: 50px;
+        text-indent: 10px;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3">
+            <h1>Danh sách ca</h1>
+        </div>
+        <div class="col-sm">
+            <button type="button" class="btn btn-outline-success float-right" data-toggle="modal" data-target="#create-task-modal">
+                <i class="bi bi-check2-circle"></i>
+                Tạo ca mới
+            </button>
+        </div>
+    </div>
+    <div>
+        <h5>Filter</h5>
+    </div>
+
+    <form method="get">
+        <div class="form-row">
+            <div class="form-group col-md-3 mr-sm-5">
+                <input name="date" type="text" class="form-control filter-day filter" placeholder="Chọn ngày">
+            </div>
+            <div class="form-group col-md-3 mr-sm-5">
+                <select name="state" id="inputState" class="form-control filter">
+                    <option value="" selected>Trạng thái</option>
+                    <option value="0">Chưa diễn ra</option>
+                    <option value="1">Đang diễn ra</option>
+                    <option value="2">Kết thúc</option>
+                </select>
+            </div>
+            <div class="form-group col-md-3 mr-sm-5">
+                <button type="submit" class="btn btn-success h-100" style="width: 120px; border-radius: 10px;">Filter</button>  
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3 mr-sm-5">
+                <input name="id_employee" type="text" class="form-control filter" id="filterID" placeholder="ID Nhân viên">
+            </div>
+        </div>
+    </form>
+    <div style="overflow-y:scroll; height:45vh;">
+        <table class="table mt-4">
+            <thead class="bg-light">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Ngày</th>
+                    <th scope="col">Giờ bắt đầu</th>
+                    <th scope="col">Giờ kết thúc</th>
+                    <th scope="col" class="col-sm-2">Trạng thái</th>
+                    <th scope="col">Đã xong</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each tasks}}
+                <tr>
+                    <th scope="row">{{math @index "+" 1}}</th>
+                    <th id="date-{{this._id}}">{{this.date_str}}</th>
+                    <th id="start-{{this._id}}">{{this.time_start}}</th>
+                    <th id="end-{{this._id}}">{{this.time_end}}</th>
+                    <th>
+                        {{#if this.notYet}}
+                            <p class="text-center text-success border border-success rounded-pill" style="width: fit-content; padding: 0px 10px">Chưa diễn ra</p>
+                        {{else if this.inProgress}}
+                            <p class="text-center text-warning border border-warning rounded-pill" style="width: fit-content; padding: 0px 10px">Đang diễn ra</p>
+                        {{else if this.done}}
+                            <p class="text-center text-primary border border-primary rounded-pill" style="width: fit-content; padding: 0px 10px">Kết thúc</p>
+                        {{/if}}
+                    </th>
+                    <th>
+                        <p class="text-success">0/{{math this.assignment.length "+" 1}}</p>    
+                    </th>
+                    <th>
+                        <p class="text-center text-success border border-success rounded-pill" style="width: fit-content; padding: 0px 10px">
+                            Nhiệm vụ
+                        </p>
+                    </th>
+                    <th>
+                        <div class="dropdown">
+                            <a class="btn hidden-arrow" role="button" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="bi bi-three-dots-vertical"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" style="box-shadow: 0px 2px 5px rgba(119, 147, 65, 0.3); border-radius: 20px;">
+                                <a class="dropdown-item" data-toggle="modal" data-target="#update-task-modal" data-update="{{this._id}}">Chỉnh sửa thời gian</a>
+                                <a class="dropdown-item" href="task/{{this._id}}/assign">Phân công ca</a>
+                                <a class="dropdown-item text-danger" data-toggle="modal" data-target="#confirm-delete-modal" data-delete="{{this._id}}">Xóa ca</a>
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal fade" id="create-task-modal" tabindex="-1" role="dialog" aria-labelledby="create-task-modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="create-task-modalLabel">Tạo ca mới</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <input name="time-start" type="text" class="form-control choose-time reset-create" placeholder="Giờ bắt đầu">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <input name="date-assign" type="text" class="form-control choose-day reset-create" placeholder="Chọn ngày">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <input name="time-end" type="text" class="form-control choose-time reset-create" placeholder="Giờ kết thúc">
+                            {{!-- <i class="bi bi-calendar-event"></i> --}}
+                        </div>
+                        <div class="form-group col-md-3">
+                            <button type="submit" class="btn btn-outline-success btn-block">Xác nhận</button>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <button type="button" class="btn btn-outline-danger btn-block" id="reset-create-form">Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="confirm-delete-modal" tabindex="-1" role="dialog" aria-labelledby="confirm-delete-modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-center">
+                    <i class="bi bi-person-check-fill" style="font-size:36px;"></i>
+                </div>
+                <h5 class="text-center mt-3">Bạn có chắc chắn muốn xóa ca này?</h5>
+                <div class="form-row mt-3">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-outline-success btn-block" id="btn-delete-task">Xác nhận</button>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-danger btn-block" data-dismiss="modal">Hủy bỏ</button>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="update-task-modal" tabindex="-1" role="dialog" aria-labelledby="update-task-modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="update-task-modalLabel">Chỉnh sửa ca</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post" id="update-task-form">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <input id="start-update" name="time-start" type="text" class="form-control choose-time reset-update" placeholder="Giờ bắt đầu">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <input id="date-update" name="date-assign" type="text" class="form-control choose-day reset-update" placeholder="Chọn ngày">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <input id="end-update" name="time-end" type="text" class="form-control choose-time reset-update" placeholder="Giờ kết thúc">
+                            {{!-- <i class="bi bi-calendar-event"></i> --}}
+                        </div>
+                        <div class="form-group col-md-3">
+                            <button id="btn-update-task" type="button" class="btn btn-outline-success btn-block">Xác nhận</button>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <button type="button" class="btn btn-outline-danger btn-block" id="reset-update-form">Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{!-- Hidden delete form --}}
+<form id="delete-task-form" method="post"></form>
+
+<script type="text/javascript">
+    $(function() {
+        var deleteId;
+        var updateId;
+        var deleteBtn = document.getElementById('btn-delete-task');
+        var deleteForm = document.forms['delete-task-form'];
+        var resetCreateClick = document.getElementById('reset-create-form');
+        var updateForm = document.forms['update-task-form'];
+        var updateBtn = document.getElementById('btn-update-task');
+        var resetUpdateClick = document.getElementById('reset-update-form');
+        
+        $('.filter-day').datepicker({
+            inline: true,
+            format: "yyyy-mm-dd",
+        });
+        $('.choose-day').datepicker({
+            inline: true,
+            format: "yyyy-mm-dd",
+            startDate: new Date()
+        });
+        $('.choose-time').datetimepicker({
+            format: 'hh:mm a'
+        });
+        $('#confirm-delete-modal').on('show.bs.modal', function(event) {
+            var btn = $(event.relatedTarget);
+            deleteId = btn.data('delete');
+        });
+        
+        // prevent datepicker from firing bootstrap modal "show.bs.modal" (BUG!!!)
+        $("#date-update").datepicker().on('show.bs.modal', function(event) {
+            event.stopPropagation(); 
+        });
+        ///////////////////////////////////////////////////////////////////////////
+
+        $('#update-task-modal').on('show.bs.modal', function(event) {
+            var btn = $(event.relatedTarget);
+            updateId = btn.data('update');
+            console.log(updateId);
+
+            var date = document.getElementById('date-' + updateId).textContent;
+            document.getElementById('start-update').value = document.getElementById('start-' + updateId).textContent;
+            document.getElementById('end-update').value = document.getElementById('end-' + updateId).textContent;
+            var day = date.slice(0, 2);
+            var month = date.slice(3, 5);
+            var year = date.slice(6);
+            document.getElementById('date-update').value = `${year}-${month}-${day}`;
+        });
+        deleteBtn.onclick = function() {
+            deleteForm.action = '/task/' + deleteId + '?_method=delete';
+            deleteForm.submit();
+        }
+        resetCreateClick.onclick = function() {
+            document.querySelectorAll('.reset-create').forEach(input => {
+                input.value = "";
+            });
+        }
+        resetUpdateClick.onclick = function() {
+            document.querySelectorAll('.reset-update').forEach(input => {
+                input.value = "";
+            });
+        }
+        updateBtn.onclick = function () {
+            updateForm.action = '/task/' + updateId + '?_method=patch';
+            updateForm.submit();
+        }
+    });
+</script>

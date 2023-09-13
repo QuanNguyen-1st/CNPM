@@ -1,0 +1,212 @@
+<style>
+    textarea.select2-search__field {
+        text-indent: 10px;
+        margin-bottom: 4px;
+    }
+    textarea.select2-search__field[aria-controls="select2-employee-assigned-results"] {
+        margin-bottom: 3.5px;
+    }
+    .select2-selection__rendered {
+        line-height: 31px !important;
+    }
+    .select2-container .select2-selection--single {
+        height: 35px !important;
+    }
+    .select2-selection__arrow {
+        height: 34px !important;
+    }
+    .select2-container--default.select2-container--focus .select2-selection--multiple{
+        border: 1px solid #ced4da; !important;;
+    }
+    .select2-container--default .select2-selection--multiple{
+        border: 1px solid #ced4da; !important;;
+    }
+    .select2-container .select2-results__option.optInvisible {
+        display: none;
+    }
+</style>
+<div class="row" style="margin-left: 14.6px">
+    <a href="/task">
+        <i class="bi bi-arrow-left" style="font-size: 36px;"></i>
+    </a>
+    <div class="col-sm-5">
+        <h1>Phân nhiệm vụ</h1>
+    </div>
+    <div class="col-sm-6">
+        {{#if assigned}}
+
+        {{else}}
+        <button type="button" class="btn btn-outline-success float-right" data-toggle="modal" data-target="#assign-mcp-modal">
+            <i class="bi bi-check2-circle"></i>
+            Phân công MCP
+        </button>
+        {{/if}}
+    </div>
+</div>
+<div class="container">
+    <div style="overflow-y:scroll; height:45vh;">
+        <table class="table mt-4">
+            <thead class="bg-light">
+                <tr>
+                    <th scope="col">Địa điểm</th>
+                    <th scope="col">Nhóm trưởng</th>
+                    <th scope="col">Thành viên</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#if assigned}}
+                <tr>
+                    <th scope="row">{{address}}</th>
+                    <th>{{leader}}</th>
+                    <th>
+                        {{#each employees_assigned}}
+                            <p>{{this.name}}</p>
+                        {{/each}}
+                    </th>
+                    <th>
+                        <div class="dropdown">
+                            <a class="btn hidden-arrow" role="button" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="bi bi-three-dots-vertical"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" style="box-shadow: 0px 2px 5px rgba(119, 147, 65, 0.3); border-radius: 20px;">
+                                <a class="dropdown-item text-danger" data-toggle="modal" data-target="#confirm-delete-modal" data-task="{{task_id}}">Xóa</a>
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+                {{/if}}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal fade" id="assign-mcp-modal" tabindex="-1" role="dialog" aria-labelledby="assign-mcp-modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h3 class="modal-title w-100" id="assign-mcp-modalLabel">Phân công nhiệm vụ</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+                <form method="post">
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="form-group col-md">
+                                <select name="mcp" id="mcp" class="form-control select-form">
+                                    <option value="">Địa điểm MCP</option>
+                                    {{#each mcps}}
+                                        <option value="{{this._id}}" >{{this.address}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row handle-duplicate-empolyee">
+                            <div class="form-group col-md">
+                                <select name="leader" id="leader" class="form-control select-form">
+                                    <option value="">Nhóm trưởng</option>
+                                    {{#each employees}}
+                                        <option value="{{this._id}}" >{{this.name}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row handle-duplicate-empolyee">
+                            <div class="form-group col-md">
+                                <select name="employee-assigned" id="employee-assigned" class="form-control select-form" multiple="multiple" style="width:100%;height:38px;">
+                                    {{#each employees}}
+                                        <option value="{{this._id}}">{{this.name}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6"></div>
+                            <div class="form-group col-md-3"></div>
+                            <div class="form-group col-md-3">
+                                <button type="submit" class="btn btn-outline-success btn-block">Xác nhận</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="confirm-delete-modal" tabindex="-1" role="dialog" aria-labelledby="confirm-delete-modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-center">
+                    <i class="bi bi-person-check-fill" style="font-size:36px;"></i>
+                </div>
+                <h5 class="text-center mt-3">Bạn có chắc chắn muốn xóa?</h5>
+                <div class="form-row mt-3">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-outline-success btn-block" id="btn-delete-assign">Xác nhận</button>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-danger btn-block" data-dismiss="modal">Hủy bỏ</button>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{!-- Hidden form --}}
+<form id="delete-assign-form" method="post"></form>
+
+
+<script>
+    $(function() {
+        function resultState(data, container) {
+            if(data.element) {
+                $(container).addClass($(data.element).attr("class"));
+            }
+            return data.text;
+        }
+        $('#employee-assigned').select2({
+            placeholder: 'Thành viên',
+            templateResult: resultState
+        });
+        var previousLeader;
+        if (document.getElementById('leader')) {
+            document.getElementById('leader').addEventListener('change', function() {
+                if (previousLeader) {
+                    $(`#employee-assigned option[value = "${previousLeader}"]`).removeClass("optInvisible");
+                }
+                previousLeader = this.value;
+                console.log(previousLeader);
+                $(`#employee-assigned option[value = "${this.value}"]`).addClass("optInvisible");
+            })
+        }
+        $('#employee-assigned').on("select2:select select2:unselect", function (e) {
+            var items = $(this).val();
+            document.querySelectorAll('#leader option').forEach(element => {
+                if (element.value) {
+                    if (items.includes(element.value)) {
+                        element.style.display = 'none';
+                    } else {
+                        if (element.style.display) {
+                            element.style.removeProperty('display');
+                        }
+                    }
+                }
+            });
+        })
+
+        var deleteAssignId;
+        var deleteBtn = document.getElementById('btn-delete-assign');
+        var deleteForm = document.forms['delete-assign-form']; 
+        $('#confirm-delete-modal').on('show.bs.modal', function(event) {
+            var btn = $(event.relatedTarget);
+            deleteAssignId = btn.data('task');
+        });
+        deleteBtn.onclick = function() {
+            deleteForm.action = '/task/' + deleteAssignId + '/assign' + '?_method=delete';
+            deleteForm.submit();
+        }
+    })
+</script>

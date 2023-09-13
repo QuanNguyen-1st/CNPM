@@ -1,0 +1,53 @@
+<style>
+    th select {
+        border-radius: 9px;
+        width: 185px;
+        height: 42px;
+        text-indent:10px;
+    }
+</style>
+<div class="container">
+    <h1>Nhân viên</h1>
+    <form method="post" action="/employee?_method=PUT">
+        <div style="overflow-y:scroll; height:60vh;">
+            <table class="table" style="margin-top:20px;">
+                <thead class="rounded-top bg-light">
+                    <tr>
+                        <th scope="col" style="width: 185px;">#</th>
+                        <th scope="col" style="width: 300px;">Tên</th>
+                        <th scope="col" style="width: 185px;">Vai trò</th>
+                        <th scope="col" style="width: 185px;">Khác</th>
+                    </tr>
+                </thead>
+                <tbody id="scrollViewContainer">
+                    {{#each employees}}
+                    <tr>
+                        <th scope="row">{{math @index "+" 1}}</th>
+                        <th>{{this.name}}</th>
+                        <th>
+                            <select name="{{this._id}}" class="form-control form-select" aria-label=".form-select-lg">
+                                {{#if this.collector}}
+                                    <option value="collector" selected>Collector</option>
+                                    <option value="janitor">Janitor</option>
+                                {{else}}
+                                    <option value="janitor" selected>Janitor</option>
+                                    <option value="collector">Collector</option>
+                                {{/if}}
+                            </select>
+                        </th>
+                        <th>
+                            <div class="dropdown">
+                                <a class="btn hidden-arrow" role="button" type="button" id="dropdownMenuIcon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="bi bi-three-dots-vertical"></i>
+                                </a>
+                            </div>
+                            
+                        </th>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        <button type="submit" class="btn btn-success float-right" >Lưu thay đổi</button>
+    </form>
+</div>
